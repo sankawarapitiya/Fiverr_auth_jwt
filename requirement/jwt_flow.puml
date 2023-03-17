@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Group Issue JWT
+client_app -> server: Authentication Request
+server --> server: Check signature.\n signature equals abc issue jwt
+server --> client_app: issue JWT
+end
+
+group Get Request
+client_app -> server: Get User details
+server -> server: Filter1: validate JWT
+server -> client_app: respond with user info
+end
+
+group Post Request
+client_app -> server: post user details change
+server -> server: Filter1: validate JWT
+server -> server: Check user have roles to change details
+server -> server: Filter 2: inspect body.footer. \n if signature equals to data from the db, allow post method
+server -> client_app: 200 or 401 if unauthorized
+end
+@enduml
