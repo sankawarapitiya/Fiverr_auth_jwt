@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(name = "_user",uniqueConstraints = {@UniqueConstraint(columnNames = {"email", "firstName"})})
 public class User implements UserDetails {
 
     @Id
@@ -26,8 +26,10 @@ public class User implements UserDetails {
     private  Integer id;
     private  String firstName;
     private  String lastName;
+
+
     private  String email;
-    private  String password;
+    private  String signature;
 
     @Enumerated(EnumType.STRING)
     private  Role role;
@@ -40,7 +42,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return signature;
     }
 
     @Override
