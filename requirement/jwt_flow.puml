@@ -19,6 +19,7 @@ server --> server: Check signature.\n signature equals abc issue jwt
 server --> client_app: issue JWT
 end
 
+
 group Get Request
 mobile_app ->  client_app: Get
 client_app -> client_app: validate JWT
