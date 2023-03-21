@@ -1,25 +1,39 @@
 @startuml
 'https://plantuml.com/sequence-diagram
-
+participant mobile_app as mobile_app
+participant client_Server as client_app
+participant server as server
 autonumber
 
-Group Issue JWT
+Group USER JWT
+mobile_app ->  client_app: Username/pwd
+client_app -> client_app: validate username/pwd
+client_app --> mobile_app: issue JWT
+end
+
+Group Server Issue JWT
+mobile_app ->  client_app: Some request
+client_app -> client_app: validate JWT
 client_app -> server: Authentication Request
 server --> server: Check signature.\n signature equals abc issue jwt
 server --> client_app: issue JWT
 end
 
 group Get Request
+mobile_app ->  client_app: Get
+client_app -> client_app: validate JWT
 client_app -> server: Get User details
 server -> server: Filter1: validate JWT
 server -> client_app: respond with user info
 end
 
 group Post Request
+mobile_app ->  client_app: POST/PUT
+client_app -> client_app: validate JWT
 client_app -> server: post user details change
 server -> server: Filter1: validate JWT
-server -> server: Check user have roles to change details
 server -> server: Filter 2: inspect body.footer. \n if signature equals to data from the db, allow post method
+server -> server: Check user have roles to change details
 server -> client_app: 200 or 401 if unauthorized
 end
 @enduml

@@ -1,6 +1,7 @@
 package com.nbkarthi.auth_jwt.auth;
 
 import com.nbkarthi.auth_jwt.config.JwtService;
+import com.nbkarthi.auth_jwt.config.SignatureAuthenticationToken;
 import com.nbkarthi.auth_jwt.model.Role;
 import com.nbkarthi.auth_jwt.model.User;
 import com.nbkarthi.auth_jwt.repository.UserRepository;
@@ -11,6 +12,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -40,20 +43,18 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
 
-       authenticationManager.authenticate(
 
-            new  UsernamePasswordAuthenticationToken(
-                    request.getEmail(),
-                    request.getSignature()
-            )
-    );
-    var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        if(validateSignature(request.getSignature())){
+            return  jwtService.generateToken("Server Token");
+        }else{
+            //401; // Unauthorized
+        }
+
     }
 
+    private boolean validateSignature(String signature) {
+        return true;
+    }
 
 
 }

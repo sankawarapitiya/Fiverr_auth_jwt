@@ -29,7 +29,7 @@ public class User implements UserDetails {
 
 
     private  String email;
-    private  String signature;
+    private  String publicKey;
 
     @Enumerated(EnumType.STRING)
     private  Role role;

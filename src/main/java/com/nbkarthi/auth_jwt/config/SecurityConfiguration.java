@@ -11,6 +11,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Collections;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -38,5 +40,15 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return  http.build();
+    }
+
+    @Bean
+    public SignatureAuthenticationProvider signatureAuthenticationProvider() {
+        return new SignatureAuthenticationProvider("publicKey");
+    }
+
+    @Bean
+    public SignatureAuthenticationToken signatureAuthenticationToken() {
+        return new SignatureAuthenticationToken("publicKey", "principal", Collections.emptyList());
     }
 }

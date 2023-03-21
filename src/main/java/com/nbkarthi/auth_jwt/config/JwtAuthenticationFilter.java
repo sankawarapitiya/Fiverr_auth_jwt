@@ -36,22 +36,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 //        jwt = authHeader.substring(7);
         jwt =   authHeader.split(" ")[1].trim();
-        userEmail = jwtService.extractUsername(jwt);
-        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            if(jwtService.isTokenValid(jwt, userDetails)){
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authenticationToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+
+        //validateServerToken(JWT);
+        //From the body footer you fetch the email Id and then you load the user details from the database
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername("email_id");
+        //Validate User Signature from the footer
+        if(!validateUserSignature("Signature", userDetails)){
+            filterChain.doFilter(request, response);
+            return;
         }
+
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                userDetails,
+                null,
+                userDetails.getAuthorities()
+        );
+        authenticationToken.setDetails(
+                new WebAuthenticationDetailsSource().buildDetails(request)
+        );
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
         filterChain.doFilter(request,response);
 
+    }
+
+    private void validateUserSignature(String signature, UserDetails userDetails) {
+        return true
     }
 }
