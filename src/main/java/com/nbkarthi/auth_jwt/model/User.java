@@ -1,7 +1,6 @@
 package com.nbkarthi.auth_jwt.model;
 
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return signature;
+        return publicKey;
     }
 
     @Override

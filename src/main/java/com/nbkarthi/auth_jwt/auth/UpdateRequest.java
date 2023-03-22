@@ -2,9 +2,7 @@ package com.nbkarthi.auth_jwt.auth;
 
 
 import com.nbkarthi.auth_jwt.model.Role;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

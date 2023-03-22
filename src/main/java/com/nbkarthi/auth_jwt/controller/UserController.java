@@ -39,7 +39,7 @@ public class UserController {
         return userService.deleteUser(request);
     }
 
-//    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+//    @PreAuthorize("hasAnyAuthority('USER')")
     @GetMapping("/users")
     public Optional<List<User>> getAllUsers() {
         return userService.getAllUsers();

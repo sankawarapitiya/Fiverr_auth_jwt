@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
@@ -25,10 +28,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<? > authenticate(
             @RequestBody AuthenticationRequest request
     ){
-        return  ResponseEntity.ok(service.authenticate(request));
+
+        Map<String , String > server_token = new HashMap<>();
+        server_token.put("server_token", service.authenticate(request));
+        return  ResponseEntity.ok(server_token);
     }
 
 

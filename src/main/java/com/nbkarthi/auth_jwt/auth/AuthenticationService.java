@@ -1,19 +1,16 @@
 package com.nbkarthi.auth_jwt.auth;
 
 import com.nbkarthi.auth_jwt.config.JwtService;
-import com.nbkarthi.auth_jwt.config.SignatureAuthenticationToken;
 import com.nbkarthi.auth_jwt.model.Role;
 import com.nbkarthi.auth_jwt.model.User;
 import com.nbkarthi.auth_jwt.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +26,7 @@ public class AuthenticationService {
                .firstName(request.getFirstname())
                .lastName(request.getLastname())
                .email(request.getEmail())
-               .signature(passwordEncoder.encode(request.getSignature()))
+               .publicKey(passwordEncoder.encode(request.getSignature()))
                .role(Role.USER)
                .build();
        userRepository.save(user);
@@ -41,18 +38,29 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public String    authenticate(AuthenticationRequest request) {
 
+        Optional<User> user = userRepository.findByEmail(request.getEmail());
 
-        if(validateSignature(request.getSignature())){
-            return  jwtService.generateToken("Server Token");
-        }else{
-            //401; // Unauthorized
+        if(user.isPresent()){
+            return jwtService.generateToken(user.get());
         }
 
+
+
+//        if(validateSignature(request)){
+//            return  jwtService.generateToken("Server Token");
+//        }else{
+//            //401; // Unauthorized
+//        }
+
+        return null;
     }
 
-    private boolean validateSignature(String signature) {
+    private boolean validateSignature(AuthenticationRequest authUser) {
+
+        Optional<User> user =     userRepository.findByEmail(authUser.getEmail());
+
         return true;
     }
 

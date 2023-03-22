@@ -26,7 +26,7 @@ public class SystemUserGenerator  implements CommandLineRunner {
         user.setEmail("admin@123.com");
         user.setFirstName("admin");
         user.setLastName("user");
-        user.setSignature(passwordEncoder.encode("adm"));
+        user.setPublicKey(passwordEncoder.encode("adm"));
         user.setRole(Role.ADMIN);
         userRepository.save(user);
 
@@ -34,7 +34,7 @@ public class SystemUserGenerator  implements CommandLineRunner {
         user2.setEmail("user@123.com");
         user2.setFirstName("user");
         user2.setLastName("user2");
-        user2.setSignature(passwordEncoder.encode("usr"));
+        user2.setPublicKey(passwordEncoder.encode("usr"));
         user2.setRole(Role.USER);
         userRepository.save(user2);
     }
