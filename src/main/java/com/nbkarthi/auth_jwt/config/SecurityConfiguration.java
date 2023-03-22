@@ -20,8 +20,8 @@ import java.util.Collections;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration {
 
-    @Autowired
-    JwtAuthenticationFilter jwtAuthFilter;
+//    @Autowired
+//    JwtAuthenticationFilter jwtAuthFilter;
     @Autowired
     AuthenticationProvider authenticationProvider;
 
@@ -29,26 +29,44 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf().disable()
-                .addFilterAfter(filterSignature(), BasicAuthenticationFilter.class)
-                .antMatcher("/*")
+//                .addFilterBefore(filterSignature(), BasicAuthenticationFilter.class)
+//                .antMatcher("/*")
+                .authorizeRequests()
+                .antMatchers("/api/v1/auth/authenticate")
+                .permitAll()
+
+                .and()
+
+
+
+
+
 //                .authorizeHttpRequests().antMatchers("/api/v1/auth/**")
 //                .permitAll()
 //                .anyRequest()
 //                .authenticated()
 //                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authenticationProvider(authenticationProvider).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider);
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
 
-    @Bean
-    public SignatureAuthenticationProvider filterSignature() {
-        return new SignatureAuthenticationProvider();
-    }
+//    @Bean
+//    public SignatureAuthenticationProvider filterSignature() {
+//        return new SignatureAuthenticationProvider();
+//    }
 
 //    @Bean
-//    public SignatureAuthenticationToken signatureAuthenticationToken() {
-//        return new SignatureAuthenticationToken("publicKey", "principal", Collections.emptyList());
+//    public IssueServerToken filterServerSignature() {
+//        return new IssueServerToken();
 //    }
+
+    @Bean
+    public SignatureAuthenticationToken signatureAuthenticationToken() {
+        return new SignatureAuthenticationToken("publicKey", "principal", Collections.emptyList());
+    }
 }

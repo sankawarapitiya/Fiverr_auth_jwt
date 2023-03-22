@@ -29,11 +29,12 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate")
     public ResponseEntity<? > authenticate(
-            @RequestBody AuthenticationRequest request
+            @RequestBody ServerTokenRequest request
     ){
 
+        System.out.println("going to lllllllllllllllllllllll");
         Map<String , String > server_token = new HashMap<>();
-        server_token.put("server_token", service.authenticate(request));
+        server_token.put("server_token", service.generateServerToken(request.getSignature()));
         return  ResponseEntity.ok(server_token);
     }
 

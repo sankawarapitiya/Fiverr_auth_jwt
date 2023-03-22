@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -46,6 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //From the body footer you fetch the email Id and then you load the user details from the database
 
 //        jwtService.isTokenValid(jwt,request.)
+
+        //get user from body footer
 
         UserDetails userDetails = this.userDetailsService.loadUserByUsername("email_id");
         //Validate User Signature from the footer
